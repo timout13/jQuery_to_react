@@ -6,9 +6,10 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router";
-
+import store from './redux/store';
 import Create from "./pages/Create/index.jsx";
 import List from "./pages/List";
+import {Provider} from "react-redux";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,8 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-            <RouterProvider router={router} />
+    <Provider store={store}>
+        <RouterProvider router={router} />
+    </Provider>
 
 );
