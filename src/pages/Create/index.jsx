@@ -26,9 +26,6 @@ function Create() {
         states && dispatch(update({data_states: states}));
         departements && dispatch(update({data_departements: departements}));
     }, []);
-    const [startDate, setStartDate] = useState(new Date());
-    const [birthDate, setbirthDate] = useState(new Date());
-    const [selectedOption, setSelectedOption] = useState(null);
     const stateOptions = state_form.data_states.map(state=> {
         return {value: state.abbreviation, label: state.name}
     });
@@ -71,14 +68,14 @@ function Create() {
                 <h2>Create Employee</h2>
                 <form action="#" id="create-employee">
                     <label htmlFor="first-name">First Name</label>
-                    <input type="text" id="first-name"/>
+                    <input type="text" id="first-name" onChange={(e) => dispatch(update({firstname: e.target.value}))}/>
 
                     <label htmlFor="last-name">Last Name</label>
-                    <input type="text" id="last-name"/>
+                    <input type="text" id="last-name" onChange={(e) => dispatch(update({lastname: e.target.value}))}/>
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-                    <DatePicker showIcon locale={fr} dateFormat="dd/mm/yyyy" selected={birthDate}
-                                onChange={(date) => setbirthDate(date)}></DatePicker>
+                    <DatePicker showIcon locale={fr} dateFormat="dd/MM/yyyy" selected={state_form.birthday}
+                                onChange={(date) => dispatch(update({birthday:date}))}></DatePicker>
                     <label htmlFor="start-date">Start Date</label>
                     <DatePicker
                         name={"start_day"}
@@ -93,17 +90,17 @@ function Create() {
                                 months={months}
                             />
                         )}
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
+                        selected={state_form.startday}
+                        onChange={(date) => dispatch(update({startday:date}))}
                     />
                     <fieldset className="address">
                         <legend>Address</legend>
 
                         <label htmlFor="street">Street</label>
-                        <input id="street" type="text"/>
+                        <input id="street" type="text" onChange={(e) => dispatch(update({street: e.target.value}))}/>
 
                         <label htmlFor="city">City</label>
-                        <input id="city" type="text"/>
+                        <input id="city" type="text" onChange={(e) => dispatch(update({city: e.target.value}))}/>
 
                         <label htmlFor="state">State</label>
                         <Select
@@ -116,7 +113,7 @@ function Create() {
                         />
 
                         <label htmlFor="zip-code">Zip Code</label>
-                        <input id="zip-code" type="number"/>
+                        <input id="zip-code" type="number" onChange={(e) => dispatch(update({zipcode: e.target.value}))}/>
                     </fieldset>
 
                     <label htmlFor="department">Department</label>
@@ -134,7 +131,6 @@ function Create() {
             <Modal isOpen={state_form.modal} onClose={() => dispatch(update({modal:false}))}>
                 <p>Employee Created!</p>
             </Modal>
-            <button onClick={() => dispatch(update({modal:true}))}>ouvrir</button>
         </>
     );
 }

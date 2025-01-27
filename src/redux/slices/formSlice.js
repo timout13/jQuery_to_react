@@ -3,8 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     firstname: 'Olive',
     lastname: 'Pétale',
-    birthday: '20/02/2006',
-    startday: '01/01/202',
+    birthday: new Date(),
+    startday: new Date(),
     street:'Avenue du Pré',
     city:'Clermont-Ferrand',
     state:'France',
