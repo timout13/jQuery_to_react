@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    firstname: 'test',
-    lastname: '',
-    birthday: '',
-    startday: '',
-    street:'',
-    city:'',
-    state:'',
+    firstname: 'Olive',
+    lastname: 'Pétale',
+    birthday: '20/02/2006',
+    startday: '01/01/202',
+    street:'Avenue du Pré',
+    city:'Clermont-Ferrand',
+    state:'France',
+    zipcode:63000,
+    departement:'IT',
     data_states:[],
     data_departements:[],
-    zipcode:null,
-    departement:null,
     modal:false
 };
 
@@ -23,11 +23,16 @@ const formSlice = createSlice({
     reducers: {
         update:(state, action)=>{
             Object.keys(action.payload).forEach((key) => {
+
                 if (state.hasOwnProperty(key)) {
                     state[key] = action.payload[key];
                 }
             });
-        }
+        },
+        addRow: (state, action) => {
+            // Ajoute une nouvelle ligne
+            state.rows.push(action.payload);
+        },
     },
 });
 

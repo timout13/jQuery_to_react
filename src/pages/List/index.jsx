@@ -1,110 +1,24 @@
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
-import { useState } from 'react';
+import {useSelector} from "react-redux";
 function List() {
     DataTable.use(DT);
-    const [tableData, setTableData] = useState([
-        [
-            'Tiger Nixon',
-            'System Architect',
-            'Edinburgh',
-            '5421',
-            '2011-04-25',
-            '$320,800',
-        ],
-        [
-            'Garrett Winters',
-            'Accountant',
-            'Tokyo',
-            '8422',
-            '2011-07-25',
-            '$170,750',
-        ],
-        [
-            'Ashton Cox',
-            'Junior Technical Author',
-            'San Francisco',
-            '1562',
-            '2009-01-12',
-            '$86,000',
-        ],
-        [
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],[
-            'Cedric Kelly',
-            'Senior Javascript Developer',
-            'Edinburgh',
-            '6224',
-            '2012-03-29',
-            '$433,060',
-        ],
-    ]);
+    const rows = useSelector(state=> state.table.rows);
     return (
         <div id="employee-div" className="container">
             <h1>Current Employees</h1>
-            <DataTable data={tableData} >
+            <DataTable data={rows} >
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Extn.</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Start Date</th>
+                    <th>Department</th>
+                    <th>Date of birth</th>
+                    <th>Street</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zipcode</th>
                 </tr>
                 </thead>
             </DataTable>

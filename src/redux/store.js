@@ -1,7 +1,29 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers  } from '@reduxjs/toolkit';
+import { persistStore,persistReducer} from "redux-persist";
+import storage from 'redux-persist/lib/storage';
 import formReducer from './slices/formSlice.js';
-export default configureStore({
-    reducer: {
-        form: formReducer,
-    }
-})
+import tableReducer from './slices/tableSlice.js';
+
+const persistConfig={
+    key: 'root',
+    storage,
+    whitelist:['table']
+};
+
+const rootReducer = combineReducers({
+    form: formReducer,
+    table: tableReducer
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware)=>getDefaultMiddleware({
+        serializableCheck: false,
+    })
+});
+
+const persistor = persistStore(store);
+
+export {store, persistor}

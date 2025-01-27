@@ -15,6 +15,7 @@ import DatepickerCustomHeader from "../../components/datepickerCustomHeader.jsx"
 import {useDispatch, useSelector} from "react-redux";
 import {update} from "../../redux/slices/formSlice.js";
 import Tools from "../../utils/Tools.js";
+import {addRow} from "../../redux/slices/tableSlice.js";
 
 
 
@@ -28,7 +29,6 @@ function Create() {
     const [startDate, setStartDate] = useState(new Date());
     const [birthDate, setbirthDate] = useState(new Date());
     const [selectedOption, setSelectedOption] = useState(null);
-    console.log(states);
     const stateOptions = state_form.data_states.map(state=> {
         return {value: state.abbreviation, label: state.name}
     });
@@ -42,6 +42,22 @@ function Create() {
         const today = new Date();
         changeYear(getYear(today));
         changeMonth(getMonth(today));
+    }
+    const handleSubmit = (e)=>{
+        // [] Faire vérif du controle des champs
+        const row = {
+            firstname: state_form.firstname,
+            lastname: state_form.lastname,
+            startday: state_form.startday,
+            departement: state_form.departement,
+            birthday: state_form.birthday,
+            street: state_form.street,
+            city: state_form.city,
+            state: state_form.state,
+            zipcode: state_form.zipcode,
+        }
+        dispatch(addRow({rows : row}));
+        dispatch(update({modal:true}));
     }
     return (
         <>
@@ -113,7 +129,7 @@ function Create() {
                         value={departementOptions.find(option => option.value === state_form.departement) || null}
                     />
                 </form>
-                <button id="saveEmployee">Save</button>
+                <button id="saveEmployee" onClick={handleSubmit}>Save</button>
             </div>
             <Modal isOpen={state_form.modal} onClose={() => dispatch(update({modal:false}))}>
                 <p>Employee Created!</p>
