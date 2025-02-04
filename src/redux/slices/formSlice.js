@@ -1,18 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    firstname: 'Olive',
-    lastname: 'Pétale',
-    birthday: new Date(),
-    startday: new Date(),
-    street:'Avenue du Pré',
-    city:'Clermont-Ferrand',
-    state:'France',
-    zipcode:63000,
-    departement:'IT',
+    firstname: '',
+    lastname: '',
+    birthday: null,
+    startday: null,
+    street:'',
+    city:'',
+    state: null,
+    zipcode:null,
+    department:null,
     data_states:[],
     data_departements:[],
-    modal:false
+    modal:false,
+    error:false
 };
 
 // For token

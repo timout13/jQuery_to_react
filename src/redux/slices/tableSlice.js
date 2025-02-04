@@ -11,7 +11,7 @@ const tableSlice = createSlice({
                 action.payload.rows.firstname,
                 action.payload.rows.lastname,
                 action.payload.rows.startday,
-                action.payload.rows.departement,
+                action.payload.rows.department,
                 action.payload.rows.birthday,
                 action.payload.rows.street,
                 action.payload.rows.city,
