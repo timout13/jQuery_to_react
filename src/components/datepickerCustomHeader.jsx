@@ -13,15 +13,17 @@ function DatepickerCustomHeader ({
                           years,
                           months,
                       }) {
+    const handleIncreaseMonth = (e)=>{
+        e.preventDefault();
+        increaseMonth(e);
+    }
+    const handleDecreaseMonth = (e)=>{
+        e.preventDefault();
+        decreaseMonth(e);
+    }
     return (
-        <div
-            style={{
-                margin: 10,
-                display: "flex",
-                justifyContent: "center",
-            }}
-        >
-            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+        <div className="content">
+            <button className="chevron" onClick={e=> handleDecreaseMonth(e)} disabled={prevMonthButtonDisabled}>
                 {"<"}
             </button>
             <button
@@ -61,7 +63,7 @@ function DatepickerCustomHeader ({
                 ))}
             </select>
 
-            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+            <button  className="chevron" onClick={e=> handleIncreaseMonth(e)} disabled={nextMonthButtonDisabled}>
                 {">"}
             </button>
         </div>

@@ -16,12 +16,19 @@ import {useDispatch, useSelector} from "react-redux";
 import {update} from "../../redux/slices/formSlice.js";
 import Tools from "../../utils/Tools.js";
 import {addRow} from "../../redux/slices/tableSlice.js";
+import InputText from "../../components/inputText.jsx";
+import InputNumber from "../../components/inputNumber.jsx";
+import InputDate from "../../components/datePicker/inputDate.jsx";
+import InputSelect from "../../components/inputSelect.jsx";
 
 
 
 function Create() {
+    const root = document.getElementById("root");
+    root.classList.add('create');
     const state_form = useSelector(state=> state.form);
     const dispatch = useDispatch();
+    const [error, setError] = useState("");
     useEffect(() => {
         states && dispatch(update({data_states: states}));
         departements && dispatch(update({data_departements: departements}));
@@ -32,21 +39,27 @@ function Create() {
     const departementOptions = state_form.data_departements.map(departement=> {
         return {value: departement.value, label: departement.label}
     });
-    const years = range(1990, getYear(new Date()) + 10, 1);
 
-    const getBackToToday = ({e,changeYear, changeMonth,})=>{
-        e.preventDefault();
-        const today = new Date();
-        changeYear(getYear(today));
-        changeMonth(getMonth(today));
-    }
     const handleSubmit = (e)=>{
-        // [] Faire vérif du controle des champs
+        e.preventDefault();
+        let isError = false;
+        if(!state_form.birthday || !state_form.startday){
+            isError= true ;
+        }
+        if(!state_form.state || !state_form.department)
+            isError= true ;
+
+        if(isError){
+            dispatch(update({error:true}));
+            setError("Remplissez le formulaire correctement.");
+            return;
+        }
+        setError("");
         const row = {
             firstname: state_form.firstname,
             lastname: state_form.lastname,
             startday: state_form.startday,
-            departement: state_form.departement,
+            department: state_form.department,
             birthday: state_form.birthday,
             street: state_form.street,
             city: state_form.city,
@@ -57,81 +70,39 @@ function Create() {
         dispatch(update({modal:true}));
     }
     return (
-        <>
-            <div className="title">
+        <div className="content">
+            <header className="header">
                 <h1>HRnet</h1>
-                <p>{state_form.firstname}</p>
-            </div>
-            <button onClick={()=>dispatch(update({firstname:'Lisa'}))}>click</button>
+                <a className={'link'} href="/list">View Current Employees &gt;</a>
+            </header>
             <div className="container">
-                <a href="/list">View Current Employees</a>
                 <h2>Create Employee</h2>
                 <form action="#" id="create-employee">
-                    <label htmlFor="first-name">First Name</label>
-                    <input type="text" id="first-name" onChange={(e) => dispatch(update({firstname: e.target.value}))}/>
+                    <div className={'left'}>
+                        <InputText label={'First Name'} inputId={'first-name'} fieldKey={'firstname'} />
+                        <InputText label={'Last Name'} inputId={'last-name'} fieldKey={'lastname'} />
 
-                    <label htmlFor="last-name">Last Name</label>
-                    <input type="text" id="last-name" onChange={(e) => dispatch(update({lastname: e.target.value}))}/>
+                        <InputDate label={'Date of Birth'} inputId={'date-of-birth'} fieldKey={'birthday'} />
+                        <InputDate label={'Start Date'} inputId={'start-date'} fieldKey={'startday'} maxDate={new Date(2050, 11, 31)} />
+                        <InputSelect label={'Department'} inputId={'department'} fieldKey={'department'} options={departementOptions}/>
+                    </div>
 
-                    <label htmlFor="date-of-birth">Date of Birth</label>
-                    <DatePicker showIcon locale={fr} dateFormat="dd/MM/yyyy" selected={state_form.birthday}
-                                onChange={(date) => dispatch(update({birthday:date}))}></DatePicker>
-                    <label htmlFor="start-date">Start Date</label>
-                    <DatePicker
-                        name={"start_day"}
-                        showIcon
-                        className="custom-input-style"
-                        dateFormat="dd/MM/yyyy"
-                        renderCustomHeader={(props) => (
-                            <DatepickerCustomHeader
-                                {...props}
-                                getBackToToday={getBackToToday}
-                                years={years}
-                                months={months}
-                            />
-                        )}
-                        selected={state_form.startday}
-                        onChange={(date) => dispatch(update({startday:date}))}
-                    />
-                    <fieldset className="address">
+                    <fieldset className="address right">
                         <legend>Address</legend>
+                        <InputText label={'Street'} inputId={'street'} fieldKey={'street'} />
+                        <InputText label={'City'} inputId={'city'} fieldKey={'city'} />
 
-                        <label htmlFor="street">Street</label>
-                        <input id="street" type="text" onChange={(e) => dispatch(update({street: e.target.value}))}/>
-
-                        <label htmlFor="city">City</label>
-                        <input id="city" type="text" onChange={(e) => dispatch(update({city: e.target.value}))}/>
-
-                        <label htmlFor="state">State</label>
-                        <Select
-                            defaultValue={stateOptions.find(option => option.value === state_form.state) || null}
-                            onChange={(option) => dispatch(update({ state: option.value }))}//dispatch update({state: abr }) state.abbreviation
-                            options={stateOptions}
-                            isSearchable={false}
-                            name="state"
-                            value={stateOptions.find(option => option.value === state_form.state) || null}
-                        />
-
-                        <label htmlFor="zip-code">Zip Code</label>
-                        <input id="zip-code" type="number" onChange={(e) => dispatch(update({zipcode: e.target.value}))}/>
+                        <InputSelect label={'State'} inputId={'state'} fieldKey={'state'} options={stateOptions}/>
+                        <InputNumber label="Zip Code" inputId="zip-code" fieldKey="zipcode" />
                     </fieldset>
-
-                    <label htmlFor="department">Department</label>
-                    <Select
-                        defaultValue={departementOptions.find(option => option.value === state_form.departement) || null}
-                        onChange={(option) => dispatch(update({ departement: option.value }))}
-                        options={departementOptions}
-                        isSearchable={false}
-                        name="departement"
-                        value={departementOptions.find(option => option.value === state_form.departement) || null}
-                    />
                 </form>
+                {error && <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{error}</p>}
                 <button id="saveEmployee" onClick={handleSubmit}>Save</button>
             </div>
             <Modal isOpen={state_form.modal} onClose={() => dispatch(update({modal:false}))}>
                 <p>Employee Created!</p>
             </Modal>
-        </>
+        </div>
     );
 }
 
