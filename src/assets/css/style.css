@@ -112,6 +112,10 @@ button#saveEmployee {
   border-radius: 15px;
   cursor: pointer;
 }
+button#saveEmployee:disabled {
+  background: rgba(131, 32, 74, 0.5);
+  cursor: default;
+}
 .link{
   color: #82204a;
   font-weight: 600;

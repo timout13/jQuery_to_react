@@ -11,7 +11,6 @@ import range from "lodash/range.js";
 
 function InputDate({ label,inputId, fieldKey, minDate= new Date(1900, 0, 1), maxDate= new Date() }) {
     const dispatch = useDispatch();
-    const [selectedDate, setSelectedDate] = useState(null);
     const [error, setError] = useState("");
     const state_form = useSelector(state=> state.form);
     const years = range(1990, getYear(new Date()) + 10, 1);
@@ -26,32 +25,20 @@ function InputDate({ label,inputId, fieldKey, minDate= new Date(1900, 0, 1), max
         if (!date) {
             setError("Veuillez sélectionner une date.");
             dispatch(update({ error: true }));
-            return null;
-        }
-
-        if (minDate && date < minDate) {
+        } else if (minDate && date < minDate) {
             setError(`La date doit être après le ${minDate.toLocaleDateString()}.`);
             dispatch(update({ error: true }));
-            return null;
-        }
-
-        if (maxDate && date > maxDate) {
+        } else if (maxDate && date > maxDate) {
             setError(`La date doit être avant le ${maxDate.toLocaleDateString()}.`);
             dispatch(update({ error: true }));
-            return null;
+        } else {
+            setError("");
+            state_form.error && dispatch(update({ error: false }));
         }
-
-        setError("");
-        state_form.error && dispatch(update({ error: false }));
-        return date;
     };
     const handleChange = (date) => {
-        const validatedDate = validateDate(date);
-
-        if (validatedDate) {
-            setSelectedDate(validatedDate);
-            dispatch(update({ [fieldKey]: validatedDate }));
-        }
+        dispatch(update({ [fieldKey]: date }));
+        validateDate(date);
     };
 
     return (
@@ -60,7 +47,7 @@ function InputDate({ label,inputId, fieldKey, minDate= new Date(1900, 0, 1), max
             <DatePicker
                 id={inputId}
                 name={inputId}
-                selected={selectedDate}
+                selected={state_form[fieldKey]}
                 onChange={(date)=>handleChange(date)}
                 locale={fr}
                 dateFormat="dd/MM/yyyy"

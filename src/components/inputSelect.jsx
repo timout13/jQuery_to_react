@@ -1,17 +1,15 @@
 import { useState } from "react";
 import Select from "react-select";
 import { update } from "../redux/slices/formSlice.js";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-function InputSelect({ label,inputId, fieldKey, options }) {
+function InputSelect({ label, inputId, fieldKey, options }) {
     const dispatch = useDispatch();
-    const [selectedOption, setSelectedOption] = useState(null);
-    const state_form = useSelector(state=> state.form);
+    const state_form = useSelector(state => state.form);
     const [error, setError] = useState("");
 
-    const isValidOption = (option) => {
-        return options.some(opt => opt.value === option?.value);
-    };
+    const isValidOption = (option) => options.some(opt => opt.value === option?.value);
+
     const validateSelection = (option) => {
         if (!option) {
             setError("Veuillez sélectionner une option.");
@@ -26,16 +24,19 @@ function InputSelect({ label,inputId, fieldKey, options }) {
         }
 
         setError("");
-        state_form.error && dispatch(update({ error: false }));
+        if (state_form.error) {
+            dispatch(update({ error: false }));
+        }
         return option;
     };
+
     const handleChange = (option) => {
         const validatedOption = validateSelection(option);
         if (validatedOption) {
-            setSelectedOption(validatedOption);
             dispatch(update({ [fieldKey]: validatedOption.value }));
         }
     };
+
     const customStyles = {
         control: (provided) => ({
             ...provided,
@@ -54,14 +55,14 @@ function InputSelect({ label,inputId, fieldKey, options }) {
             height: "30px"
         })
     };
+
     return (
-        <div className={'input-wrap'}>
+        <div className="input-wrap">
             <label htmlFor={inputId}>{label}</label>
             <Select
                 id={inputId}
                 name={inputId}
-                value={selectedOption}
-                defaultValue={options[0]}
+                value={options.find(opt => opt.value === state_form[fieldKey]) || null}
                 onChange={handleChange}
                 options={options}
                 isSearchable={false}

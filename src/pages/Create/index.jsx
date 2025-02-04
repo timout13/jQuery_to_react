@@ -13,7 +13,7 @@ import {Modal} from "@timout13/oc-modal-library";
 import '@timout13/oc-modal-library/dist/index.css';
 import DatepickerCustomHeader from "../../components/datepickerCustomHeader.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {update} from "../../redux/slices/formSlice.js";
+import {reset, update} from "../../redux/slices/formSlice.js";
 import Tools from "../../utils/Tools.js";
 import {addRow} from "../../redux/slices/tableSlice.js";
 import InputText from "../../components/inputText.jsx";
@@ -68,6 +68,7 @@ function Create() {
         }
         dispatch(addRow({rows : row}));
         dispatch(update({modal:true}));
+        dispatch(reset());
     }
     return (
         <div className="content">
@@ -97,7 +98,7 @@ function Create() {
                     </fieldset>
                 </form>
                 {error && <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>{error}</p>}
-                <button id="saveEmployee" onClick={handleSubmit}>Save</button>
+                <button disabled={state_form.error} id="saveEmployee" onClick={handleSubmit}>Save</button>
             </div>
             <Modal isOpen={state_form.modal} onClose={() => dispatch(update({modal:false}))}>
                 <p>Employee Created!</p>

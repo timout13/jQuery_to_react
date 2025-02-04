@@ -8,7 +8,7 @@ const initialState = {
     street:'',
     city:'',
     state: null,
-    zipcode:null,
+    zipcode:undefined,
     department:null,
     data_states:[],
     data_departements:[],
@@ -30,13 +30,13 @@ const formSlice = createSlice({
                 }
             });
         },
-        addRow: (state, action) => {
-            // Ajoute une nouvelle ligne
-            state.rows.push(action.payload);
-        },
+        reset: (state) => {
+            const modalState = state.modal;
+            Object.assign(state, { ...initialState, modal: modalState });
+}
     },
 });
 
-export const {  update } = formSlice.actions;
+export const {  update,reset } = formSlice.actions;
 
 export default formSlice.reducer;
